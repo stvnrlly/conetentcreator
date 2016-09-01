@@ -21,6 +21,10 @@ var ctx = canvas.getContext('2d');
 var out = fs.createWriteStream(__dirname + '/cone.png');
 var stream = canvas.pngStream();
 
+// background color
+ctx.fillStyle = '#ffffff';
+ctx.fillRect(0,0,500,500);
+
 // some cone stats
 var x = randy.randInt(0, 200);
 var y = randy.randInt(0, 200);
