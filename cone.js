@@ -21,65 +21,60 @@ var ctx = canvas.getContext('2d');
 var out = fs.createWriteStream(__dirname + '/cone.png');
 var stream = canvas.pngStream();
 
+// some cone stats
+var x = randy.randInt(0, 200);
+var y = randy.randInt(0, 200);
+var w = randy.randInt(100, 300);
+var h = randy.randInt(20, 50);
 
+// set up rotation
+ctx.save();
+ctx.translate(canvas.width/2,canvas.height/2);
+ctx.rotate((randy.randInt(0,360))*Math.PI/180);
 
-for (var i = 0; i < 500; i++) {
-  console.log('cone time!');
+// color gradient, randomized for this cone
+var gradient=ctx.createLinearGradient(0,0,170,0);
+gradient.addColorStop(0,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
+gradient.addColorStop(0.5,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
+gradient.addColorStop(1.0,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
 
-  var x = randy.randInt(0, 200);
-  var y = randy.randInt(0, 200);
-  var w = randy.randInt(100, 300);
-  var h = randy.randInt(20, 50);
+ctx.beginPath();
 
-  ctx.save();
-  ctx.translate(canvas.width/2,canvas.height/2);
-  ctx.rotate((randy.randInt(0,360))*Math.PI/180);
+// draw the triangle
+ctx.moveTo(x+(w/2), 0);
+ctx.lineTo(x, y+(h/2));
+ctx.lineTo(x+w, y+(h/2));
+ctx.lineTo(x+(w/2), 0);
+ctx.strokeStyle = gradient;
+ctx.stroke();
 
-  // color gradient
-  var gradient=ctx.createLinearGradient(0,0,170,0);
-  gradient.addColorStop(0,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
-  gradient.addColorStop(0.5,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
-  gradient.addColorStop(1.0,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
+// add color gradient
+ctx.fillStyle = gradient;
+ctx.fill();
 
-  ctx.beginPath();
+// draw an ellipse
+// http://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas#2173084
+var kappa = .5522848;
+var ox = (w / 2) * kappa; // control point offset horizontal
+var oy = (h / 2) * kappa; // control point offset vertical
+var xe = x + w;           // x-end
+var ye = y + h;           // y-end
+var xm = x + w / 2;       // x-middle
+var ym = y + h / 2;       // y-middle
 
-  // draw the top lines
-  ctx.moveTo(x+(w/2), 0);
-  ctx.lineTo(x, y+(h/2));
-  ctx.lineTo(x+w, y+(h/2));
-  ctx.lineTo(x+(w/2), 0);
-  ctx.strokeStyle = gradient;
-  ctx.stroke();
+ctx.moveTo(x, ym);
+ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+ctx.strokeStyle = gradient;
+ctx.stroke();
 
-  // add color gradient
-  ctx.fillStyle = gradient;
-  ctx.fill();
+// add color gradient
+ctx.fillStyle = gradient;
+ctx.fill();
 
-  // draw an ellipse
-  // http://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas#2173084
-  var kappa = .5522848;
-  var ox = (w / 2) * kappa; // control point offset horizontal
-  var oy = (h / 2) * kappa; // control point offset vertical
-  var xe = x + w;           // x-end
-  var ye = y + h;           // y-end
-  var xm = x + w / 2;       // x-middle
-  var ym = y + h / 2;       // y-middle
-
-  ctx.moveTo(x, ym);
-  ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
-  ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
-  ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
-  ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-  ctx.strokeStyle = gradient;
-  ctx.stroke();
-
-  // add color gradient
-  ctx.fillStyle = gradient;
-  ctx.fill();
-
-  ctx.restore();
-
-}
+ctx.restore();
 
 // write to file
 // stream.on('data', function(chunk){
