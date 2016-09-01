@@ -1,0 +1,20 @@
+{
+  "name": "conetent_creator",
+  "version": "1.0.0",
+  "description": "Draws a cone and then tweets it.",
+  "main": "cone.js",
+  "dependencies": {
+    "canvas": "^1.4.0",
+    "dotenv": "^2.0.0",
+    "randy": "^1.5.1",
+    "seed-random": "^2.2.0",
+    "twit": "^2.2.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node cone.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "stvnrlly",
+  "license": "CC0-1.0"
+}
