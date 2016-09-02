@@ -36,6 +36,10 @@ var stretch = randy.randInt(2, 5);
 
 // set up rotation
 ctx.save();
+if (randy.randInt(0, 100) > 50) {
+  ctx.translate(0, canvas.height);
+  ctx.scale(1, -1);
+}
 ctx.translate(canvas.width/2,canvas.height/2);
 ctx.rotate((randy.randInt(0,360))*Math.PI/180);
 
