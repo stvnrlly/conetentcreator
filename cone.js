@@ -49,26 +49,18 @@ gradient.addColorStop(0,'#000000'.replace(/0/g, function () {return (~~(Math.ran
 gradient.addColorStop(0.5,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
 gradient.addColorStop(1.0,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
 
-ctx.strokeStyle = gradient;
 ctx.fillStyle = gradient;
 
 ctx.scale((stretch), 1);
 
-// draw the triangle
+// draw the triangle and arc
 ctx.beginPath();
-ctx.moveTo(x, y);
-ctx.lineTo(x+r, y+h);
-ctx.lineTo(x+(2*r), y);
+ctx.moveTo(x+r, y+h);
+var angle = Math.asin(r / h);
+ctx.arc(x+r, y, r, angle, Math.PI - angle, true);
 ctx.closePath();
-ctx.stroke();
-ctx.fill();
 
-// draw a circle and stretch it into an ellipse
-ctx.beginPath();
-ctx.arc(x+r, y, r, 0, (2 * Math.PI), false);
 ctx.fill();
-ctx.stroke();
-
 ctx.restore();
 
 // write to file
