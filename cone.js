@@ -5,6 +5,7 @@ const Canvas = require('canvas');
 const randy = require('randy');
 const seed = require('seed-random');
 const Twit = require('twit');
+const argv = require('minimist')(process.argv.slice(2));
 require('dotenv').config();
 
 var T = new Twit({
@@ -17,9 +18,6 @@ var T = new Twit({
 var Image = Canvas.Image;
 var canvas = new Canvas(500, 500);
 var ctx = canvas.getContext('2d');
-
-var out = fs.createWriteStream(__dirname + '/cone.png');
-var stream = canvas.pngStream();
 
 // background color
 ctx.fillStyle = '#ffffff';
@@ -63,36 +61,40 @@ ctx.closePath();
 ctx.fill();
 ctx.restore();
 
-// write to file
-// stream.on('data', function(chunk){
-//   out.write(chunk);
-// });
-//
-// stream.on('end', function(){
-//   console.log(x, y, r, h, stretch);
-//   console.log('saved png');
-// });
-
-// create tweet
-T.post('media/upload', { media_data: canvas.toBuffer().toString('base64') }, function (err, data, response) {
-  if (err) { console.log(err); }
-  var mediaIdStr = data.media_id_string;
-  var altText = 'cone';
-  var meta_params = { media_id: mediaIdStr, alt_text: { text: altText } };
-
-  T.post('media/metadata/create', meta_params, function (err, data, response) {
-    // if (err) { console.log(err); }
-    if (!err) {
-      // now we can reference the media and post a tweet (media will attach to the tweet)
-      var params = { status: 'cone', media_ids: [mediaIdStr] };
-
-      T.post('statuses/update', params, function (err, data, response) {
-        if (err) {
-          console.log('Error posting status: \n'+err);
-        } else {
-          console.log(data, response);
-        }
-      });
-    }
+if (argv.test) {
+  // write to file
+  var out = fs.createWriteStream(__dirname + '/cone.png');
+  var stream = canvas.pngStream();
+  stream.on('data', function(chunk){
+    out.write(chunk);
   });
-});
+
+  stream.on('end', function(){
+    console.log(`>> x: ${x}, y: ${y}, r: ${r}, h: ${h}, stretch: ${stretch}`);
+    console.log('>> saved png');
+  });
+} else {
+  // create tweet
+  T.post('media/upload', { media_data: canvas.toBuffer().toString('base64') }, function (err, data, response) {
+    if (err) { console.log(err); }
+    var mediaIdStr = data.media_id_string;
+    var altText = 'cone';
+    var meta_params = { media_id: mediaIdStr, alt_text: { text: altText } };
+
+    T.post('media/metadata/create', meta_params, function (err, data, response) {
+      // if (err) { console.log(err); }
+      if (!err) {
+        // now we can reference the media and post a tweet (media will attach to the tweet)
+        var params = { status: 'cone', media_ids: [mediaIdStr] };
+
+        T.post('statuses/update', params, function (err, data, response) {
+          if (err) {
+            console.log('Error posting status: \n'+err);
+          } else {
+            console.log(data, response);
+          }
+        });
+      }
+    });
+  });
+}
