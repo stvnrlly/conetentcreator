@@ -20,7 +20,7 @@ var canvas = new Canvas(500, 500);
 var ctx = canvas.getContext('2d');
 
 // background color
-ctx.fillStyle = '#ffffff';
+ctx.fillStyle = randomColor();
 ctx.fillRect(0,0,500,500);
 
 // some cone stats
@@ -43,9 +43,9 @@ ctx.rotate((randy.randInt(0,360))*Math.PI/180);
 
 // color gradient, randomized for this cone
 var gradient=ctx.createLinearGradient(0,0,170,0);
-gradient.addColorStop(0,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
-gradient.addColorStop(0.5,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
-gradient.addColorStop(1.0,'#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);}));
+gradient.addColorStop(0, randomColor());
+gradient.addColorStop(0.5, randomColor());
+gradient.addColorStop(1.0, randomColor());
 
 ctx.fillStyle = gradient;
 
@@ -97,4 +97,8 @@ if (argv.test) {
       }
     });
   });
+}
+
+function randomColor() {
+  return '#000000'.replace(/0/g, function () {return (~~(Math.random()*16)).toString(16);});
 }
