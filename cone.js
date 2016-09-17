@@ -24,8 +24,8 @@ ctx.fillStyle = '#ffffff';
 ctx.fillRect(0,0,500,500);
 
 // some cone stats
-var x = randy.randInt(0, 85);
-var y = randy.randInt(0, 85);
+var x = randy.randInt(-50, 50);
+var y = randy.randInt(-50, 85);
 var h = randy.randInt(50, 250);
 
 // circle radius for ellipse
